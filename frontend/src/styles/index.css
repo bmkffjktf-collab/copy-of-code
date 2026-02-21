@@ -1,37 +1,54 @@
-/* Modern Apple-Style Design System */
+/* Dark Theme Design System */
 :root {
-  --color-primary: #0071e3;
-  --color-primary-dark: #0052a3;
-  --color-primary-light: #f5f5f7;
-  --color-background: #f5f5f7;
-  --color-surface: #ffffff;
-  --color-text-primary: #1d1d1f;
-  --color-text-secondary: #86868b;
-  --color-border: #e5e5e7;
-  --color-success: #34c759;
-  --color-warning: #ff9500;
-  --color-error: #ff3b30;
-  --color-info: #00b4d8;
+  /* Dark Theme Colors */
+  --color-background: #0a0a0e;
+  --color-surface: #1a1a2e;
+  --color-surface-secondary: #16213e;
+  --color-text-primary: #e5e5e7;
+  --color-text-secondary: #a1a1a6;
+  --color-text-tertiary: #86868b;
   
+  /* Brand Colors */
+  --color-primary: #00d4ff;
+  --color-primary-dark: #0099cc;
+  --color-primary-light: #33e5ff;
+  --color-accent: #00ff88;
+  --color-accent-dark: #00cc6f;
+  
+  /* Status Colors */
+  --color-success: #34c759;
+  --color-danger: #ff3b30;
+  --color-warning: #ff9500;
+  --color-info: #00d4ff;
+  
+  /* UI Elements */
+  --color-border: #424245;
+  --color-border-light: #545458;
+  --color-divider: #3a3a3d;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.7);
+  
+  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   
+  /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
-  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.2);
-  
-  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-base: 300ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-slow: 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Typography */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -48,13 +65,20 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-text-primary);
+  width: 100%;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
 }
 
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+  background: var(--color-background);
 }
 
 .app-content {
@@ -67,4 +91,41 @@ html, body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-light);
+}
+
+input, textarea, select {
+  font-family: inherit;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+}
+
+input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
 }
