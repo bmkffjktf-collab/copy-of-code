@@ -1,0 +1,104 @@
+.simulation-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.simulation-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.simulation-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.simulation-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.left-panel,
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-start,
+.btn-stop,
+.btn-optimize {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-start {
+  background: #28a745;
+  color: white;
+}
+
+.btn-start:hover {
+  background: #218838;
+}
+
+.btn-stop {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-stop:hover {
+  background: #c82333;
+}
+
+.btn-optimize {
+  background: #ffc107;
+  color: #333;
+}
+
+.btn-optimize:hover {
+  background: #ffb300;
+}
+
+@media (max-width: 1200px) {
+  .simulation-container {
+    grid-template-columns: 1fr;
+  }
+}
