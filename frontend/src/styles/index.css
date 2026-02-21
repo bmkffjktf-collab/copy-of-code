@@ -1,14 +1,37 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.app-content {
-  flex: 1;
-  display: flex;
-  overflow: hidden;
+/* Modern Apple-Style Design System */
+:root {
+  --color-primary: #0071e3;
+  --color-primary-dark: #0052a3;
+  --color-primary-light: #f5f5f7;
+  --color-background: #f5f5f7;
+  --color-surface: #ffffff;
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #86868b;
+  --color-border: #e5e5e7;
+  --color-success: #34c759;
+  --color-warning: #ff9500;
+  --color-error: #ff3b30;
+  --color-info: #00b4d8;
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.2);
+  
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -23,4 +46,25 @@ html, body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5f7 0%, #ffffff 100%);
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  background: var(--color-background);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }

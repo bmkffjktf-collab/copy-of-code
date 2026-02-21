@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { citiesAPI, intersectionsAPI } from '../utils/api'
+import { citiesAPI } from '../utils/api'
 import { City, Intersection } from '../types'
+import InteractiveMap from '../components/InteractiveMap'
 import './Dashboard.css'
 
 interface DashboardProps {
@@ -10,12 +11,11 @@ interface DashboardProps {
 export default function Dashboard({ onSelectIntersection }: DashboardProps) {
   const [cities, setCities] = useState<City[]>([])
   const [selectedCity, setSelectedCity] = useState<City | null>(null)
-  const [intersections, setIntersections] = useState<Intersection[]>([])
+  const [selectedIntersection, setSelectedIntersection] = useState<Intersection | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    console.log('Dashboard mounted, fetching cities...')
     fetchCities()
   }, [])
 
@@ -23,34 +23,27 @@ export default function Dashboard({ onSelectIntersection }: DashboardProps) {
     try {
       setError(null)
       setLoading(true)
-      console.log('Fetching cities from API...')
       const response = await citiesAPI.getAll()
-      console.log('Cities fetched successfully:', response.data)
       setCities(response.data)
+      if (response.data.length > 0) {
+        setSelectedCity(response.data[0])
+      }
     } catch (error) {
       const errorMsg = error instanceof Error ? error.message : String(error)
-      console.error('Error fetching cities:', errorMsg, error)
+      console.error('Error fetching cities:', errorMsg)
       setError(`Failed to fetch cities: ${errorMsg}`)
     } finally {
       setLoading(false)
     }
   }
 
-  const handleSelectCity = async (city: City) => {
-    setSelectedCity(city)
-    try {
-      setError(null)
-      setLoading(true)
-      console.log('Fetching intersections for city:', city.id)
-      const response = await intersectionsAPI.getAll(city.id)
-      console.log('Intersections fetched successfully:', response.data)
-      setIntersections(response.data)
-    } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error)
-      console.error('Error fetching intersections:', errorMsg, error)
-      setError(`Failed to fetch intersections: ${errorMsg}`)
-    } finally {
-      setLoading(false)
+  const handleSelectIntersection = (intersection: Intersection) => {
+    setSelectedIntersection(intersection)
+  }
+
+  const handleStartSimulation = () => {
+    if (selectedIntersection) {
+      onSelectIntersection(selectedIntersection.id)
     }
   }
 
@@ -58,9 +51,9 @@ export default function Dashboard({ onSelectIntersection }: DashboardProps) {
     return (
       <div className="dashboard error">
         <div className="error-message">
-          <h2>Error</h2>
+          <h2>⚠️ Error</h2>
           <p>{error}</p>
-          <button onClick={() => {
+          <button className="btn-retry" onClick={() => {
             setError(null)
             fetchCities()
           }}>
@@ -73,59 +66,76 @@ export default function Dashboard({ onSelectIntersection }: DashboardProps) {
 
   return (
     <div className="dashboard">
-      <div className="dashboard-container">
-        <div className="cities-section">
-          <h2>Indian Cities</h2>
-          {loading && cities.length === 0 ? (
-            <p>Loading cities...</p>
-          ) : cities.length > 0 ? (
-            <div className="cities-grid">
-              {cities.map((city) => (
-                <div
-                  key={city.id}
-                  className={`city-card ${selectedCity?.id === city.id ? 'selected' : ''}`}
-                  onClick={() => handleSelectCity(city)}
-                >
-                  <h3>{city.name}</h3>
-                  <p className="state">{city.state}</p>
-                  <p className="population">{city.population}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p>No cities available</p>
-          )}
+      <div className="dashboard-header">
+        <div className="header-content">
+          <h1>Traffic Management System</h1>
+          <p>Select a city to explore road junctions and run simulations</p>
         </div>
+      </div>
 
-        {selectedCity && (
-          <div className="intersections-section">
-            <h2>Intersections in {selectedCity.name}</h2>
-            <div className="intersections-grid">
-              {loading ? (
-                <p>Loading intersections...</p>
-              ) : intersections.length > 0 ? (
-                intersections.map((intersection) => (
-                  <div key={intersection.id} className="intersection-card">
-                    <h3>{intersection.name}</h3>
-                    <p className="location">
-                      {intersection.latitude.toFixed(4)}, {intersection.longitude.toFixed(4)}
-                    </p>
-                    <p className="lanes">Lanes: {intersection.num_lanes}</p>
-                    {intersection.description && <p className="description">{intersection.description}</p>}
-                    <button
-                      className="btn-simulate"
-                      onClick={() => onSelectIntersection(intersection.id)}
-                    >
-                      Start Simulation
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <p>No intersections found</p>
-              )}
-            </div>
+      <div className="dashboard-body">
+        <aside className="cities-panel">
+          <h3>Cities</h3>
+          <div className="cities-list">
+            {loading && cities.length === 0 ? (
+              <p className="loading-text">Loading cities...</p>
+            ) : cities.length > 0 ? (
+              cities.map((city) => (
+                <button
+                  key={city.id}
+                  className={`city-btn ${selectedCity?.id === city.id ? 'active' : ''}`}
+                  onClick={() => {
+                    setSelectedCity(city)
+                    setSelectedIntersection(null)
+                  }}
+                >
+                  <span className="city-name">{city.name}</span>
+                  <span className="city-state">{city.state}</span>
+                </button>
+              ))
+            ) : (
+              <p className="no-data">No cities available</p>
+            )}
           </div>
-        )}
+        </aside>
+
+        <main className="map-section">
+          {selectedCity ? (
+            <>
+              <InteractiveMap
+                city={selectedCity}
+                onSelectIntersection={handleSelectIntersection}
+                selectedIntersection={selectedIntersection}
+              />
+
+              {selectedIntersection && (
+                <div className="selection-panel">
+                  <div className="selected-info">
+                    <h4>Selected Junction</h4>
+                    <p className="junction-name">{selectedIntersection.name}</p>
+                    <div className="junction-details">
+                      <div className="detail-item">
+                        <span className="label">Lanes:</span>
+                        <span className="value">{selectedIntersection.num_lanes}</span>
+                      </div>
+                      <div className="detail-item">
+                        <span className="label">Location:</span>
+                        <span className="value">{selectedIntersection.latitude.toFixed(4)}, {selectedIntersection.longitude.toFixed(4)}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="btn-simulate" onClick={handleStartSimulation}>
+                    ▶ Start Simulation
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="no-city-selected">
+              <p>Select a city to view its traffic junctions</p>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   )
