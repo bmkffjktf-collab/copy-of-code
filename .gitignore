@@ -50,3 +50,4 @@ env/
 .venv
 postgres_data/
 redis_data/
+.vscode/
